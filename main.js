@@ -25,6 +25,6 @@
 
     render();
 
-    c.animateTexture(56, 44, window.textures.playerTexturesAnimations.idle);
+    c.animateTexture(60, 44, window.textures.playerTexturesAnimations.idle);
 
 })();

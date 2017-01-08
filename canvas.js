@@ -71,7 +71,7 @@ function Canvas(canvasWidth, canvasHeight) {
     }
 
     this.addBox = function(x,y) {
-        for(var i=0;i<6;i++) {
+        for(var i=0;i<7;i++) {
             this.drawTexture(x + i*8, y, window.textures.boxTextures[i]);
         }
     }
