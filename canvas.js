@@ -1,4 +1,5 @@
 function Canvas(canvasWidth, canvasHeight) {
+    'use strict';
     var canvas = document.getElementById("stack-attack");
     canvas.style.position = "absolute";
     var ctx = canvas.getContext("2d");
@@ -8,6 +9,45 @@ function Canvas(canvasWidth, canvasHeight) {
     var cubeHeight = (canvasHeight / maxY);
 
     resizeCanvasToRatio(maxX, maxY);
+
+    var elements = [];
+
+    var self = this;
+
+    this.add = function(element) {
+        elements.push(element);
+    }
+
+    this.render = function() {
+        for(var el in elements) {
+            elements[el].draw(self);
+        }
+    }
+
+    this.getElement = function() {
+        return canvas;
+    }
+
+    // Used for background textures not attached to the grid for playing
+    this.drawTextureRealXY = function(x,y,texture) {
+        for(var i=0;i<texture.length;i++) {
+            for(var j=0;j<texture[i].length;j++) {
+                if(texture[i][j] == 1) {
+                    this.makeRect(j + x, i + y);
+                } else {
+                    this.makeRect(j + x, i + y, true);
+                }
+            }
+        }
+    }
+
+    // gridX, gridY are the bottom left corner
+    // x,y are the top left corner
+    this.drawTexture = function(gridX,gridY,texture) {
+        var x = gridX*8 + 4;
+        var y = maxY - (gridY*8 + 4) - texture.length;
+        this.drawTextureRealXY(x,y,texture);
+    }
 
     this.makeRect = function(x, y, white) {
         if(x < 0 || x > maxX || y < 0 || y > maxY) { return; }
@@ -21,68 +61,9 @@ function Canvas(canvasWidth, canvasHeight) {
         }
         ctx.fillRect(xReal, yReal, cubeWidth, cubeHeight);
     }
+
     this.clear = function() {
         ctx.clearRect(0,0,canvasWidth, canvasHeight);
-    }
-
-    // x, y are the top left corner
-    this.drawTexture = function(x,y,texture) {
-        for(var i=0;i<texture.length;i++) {
-            for(var j=0;j<texture[i].length;j++) {
-                if(texture[i][j] == 1) {
-                    this.makeRect(j + x, i + y);
-                } else {
-                    this.makeRect(j + x, i + y, true);
-                }
-            }
-        }
-    }
-
-    this.addStaticTextures = function() {
-        self = this;
-        function addFloor() {
-            for(var i=4; i < 99; i+=4) {
-                self.drawTexture(i, 60, window.textures.floorTexture);
-            }
-        }
-
-        function addWall() {
-            for(var i=0; i < 63; i+=4) {
-                self.drawTexture(0, i, window.textures.wallTexture);
-            }
-        }
-
-        function addBackground() {
-            for(var i=4; i < 99; i+=8) {
-                self.drawTexture(i, 4, window.textures.backgroundTexture);
-            }
-        }
-
-        function addRailing() {
-            for(var i=0; i < 99; i+=4) {
-                self.drawTexture(i, 0, window.textures.railingTexture);
-            }
-        }
-
-        addFloor();
-        addWall();
-        addRailing();
-        addBackground();
-    }
-
-    this.addBox = function(x,y) {
-        for(var i=0;i<7;i++) {
-            this.drawTexture(x + i*8, y, window.textures.boxTextures[i]);
-        }
-    }
-
-    this.animateTexture = function(x,y,texture) {
-        self = this;
-        setInterval(function(){
-            var t = texture.shift();
-            self.drawTexture(x,y,t);
-            texture.push(t);
-        },500);
     }
 
     function resizeCanvasToRatio(width, height) {

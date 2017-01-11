@@ -1,6 +1,4 @@
 (function(){
-    var c = new Canvas(1920, 1080);
-
     window.requestAnimFrame = (function(){
     return  window.requestAnimationFrame       ||
             window.webkitRequestAnimationFrame ||
@@ -10,21 +8,37 @@
             };
     })();
 
-    function render() {
-        c.clear();
+    function keyDownTextField (e) {
+        var keyCode = e.keyCode;
+        console.log(keyCode);
 
-        c.addStaticTextures();
+        // up
+        if(keyCode == 38) {
+            p1.jump();
+        }
 
-        c.addBox(4,52);
     }
 
-    // (function animloop() {
-    //     requestAnimFrame(animloop);
-    //     render();
-    // })();
 
-    render();
+    document.addEventListener("keydown", keyDownTextField, false);
 
-    c.animateTexture(60, 44, window.textures.playerTexturesAnimations.idle);
 
+    var canvas = new Canvas(1920, 1080);
+    var scene = new Scene();
+    var p1 = new Player(10, 0);
+
+    canvas.add(scene);
+
+    for(var i=0; i<7; i++) {
+        scene.add(new Box(i, 1));
+    }
+
+    scene.add(p1);
+
+
+    (function animloop() {
+        requestAnimFrame(animloop);
+        canvas.clear();
+        canvas.render();
+    })();
 })();
