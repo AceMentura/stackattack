@@ -26,8 +26,9 @@ function Scene() {
 	}
 
 	function setAnimateDropDown(item) {
-		var speed = 1/8; // means a blok per 50 milliseconds
 		if(!(!(item.interval))) return;
+		
+		var speed = 1/8; // means a blok per 50 milliseconds
 		item.interval = setInterval(function(){
 			item.setY(item.getY() - speed);
 			if(Math.floor(item.getY()) == item.getY()) {

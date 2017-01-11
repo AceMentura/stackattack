@@ -8,17 +8,24 @@
             };
     })();
 
+    var LEFT_KEY = 37;
+    var UP_KEY = 38;
+    var RIGHT_KEY = 39;
+
     function keyDownTextField (e) {
         var keyCode = e.keyCode;
         console.log(keyCode);
 
-        // up
-        if(keyCode == 38) {
+        if(keyCode == UP_KEY) {
             p1.jump();
         }
-
+        if(keyCode == LEFT_KEY && p1.canMoveLeft(scene)) {
+            p1.moveLeft();
+        }
+        if(keyCode == RIGHT_KEY && p1.canMoveRight(scene)) {
+            p1.moveRight();
+        }
     }
-
 
     document.addEventListener("keydown", keyDownTextField, false);
 
@@ -39,7 +46,6 @@
     scene.add(new Box(1,4));
 
     scene.add(p1);
-
 
     (function animloop() {
         requestAnimFrame(animloop);
