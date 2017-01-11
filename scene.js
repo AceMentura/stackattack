@@ -2,30 +2,49 @@ function Scene() {
 	'use strict';
 
 	var items = [];
-
+	var self = this;
 
 	this.add = function(item) {
 		items.push(item);
 	}
 
-	this.getItemAt = function(x,y) {
+	this.isItemAt = function(x,y) {
 		for(var item in items) {
 			if(items[item].getX() == x && items[item].getY() == y) {
-				return items[item];
+				return true;
 			}
 		}
-		return null;
+		return false;
 	}
 
 	this.draw = function(canvas) {
 		addStaticTextures(canvas);
+		applyGravity();
 		for(var item in items) {
 			items[item].draw(canvas);
 		}
 	}
 
+	function setAnimateDropDown(item) {
+		var speed = 1/8; // means a blok per 50 milliseconds
+		if(!(!(item.interval))) return;
+		item.interval = setInterval(function(){
+			item.setY(item.getY() - speed);
+			if(Math.floor(item.getY()) == item.getY()) {
+				clearInterval(item.interval);
+				item.interval = null;
+			}
+		},50);
+	}
+
 	function applyGravity() {
-		// TODO
+		for(var item in items) {
+			var x = items[item].getX();
+			var y = items[item].getY();
+			if(y > 0 && !self.isItemAt(x,y-1) && Math.floor(y) == y) {
+				setAnimateDropDown(items[item]);
+			}
+		}
 	}
 
     function addStaticTextures(canvas) {

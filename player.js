@@ -4,6 +4,22 @@ function Player(x,y) {
 	var self = this;
 	this.textures = new PlayerTextures();
 
+	this.getX = function() {
+		return x;
+	}
+
+	this.getY = function() {
+		return y;
+	}
+
+	this.setX = function(_x) {
+		x = _x;
+	}
+
+	this.setY = function(_y) {
+		y = _y;
+	}
+
 	this.draw = function(canvas) {
 		canvas.drawTexture(x, y, self.textures.getTexture());
 	}

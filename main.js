@@ -25,13 +25,18 @@
 
     var canvas = new Canvas(1920, 1080);
     var scene = new Scene();
-    var p1 = new Player(10, 0);
+    var p1 = new Player(10, 1);
 
     canvas.add(scene);
 
     for(var i=0; i<7; i++) {
-        scene.add(new Box(i, 1));
+        scene.add(new Box(i, 3));
     }
+
+    scene.add(new Box(2,0));
+    scene.add(new Box(4,1));
+    scene.add(new Box(4,0));
+    scene.add(new Box(1,4));
 
     scene.add(p1);
 
