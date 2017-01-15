@@ -51,17 +51,20 @@
 
     var log = document.getElementById("log");
     function printLog() {
-        log.innerHTML = "";
-        for(var i in window.log) {
-            if(typeof window.log[i] == "object") {
-                log.innerHTML += "<tr colspan=2>" + i + "</tr>";
-                for(var j in window.log[i]) {
-                    log.innerHTML += "<tr><td>" + j + "</td><td>" + window.log[i][j] + "</td></tr>";    
-                }
+        log.innerHTML = objToTable(window.log);
+    }
+
+    function objToTable(obj) {
+        var res = "";
+        for(var i in obj) {
+            if(typeof obj[i] == "object") {
+                res += "<tr><td colspan=2 align='center' ><b>" + i + "</b></td></tr>";
+                res += objToTable(obj[i]);
             } else {
-                log.innerHTML += "<tr><td>" + i + "</td><td>" + window.log[i] + "</td></tr>";
+                res += "<tr><td>" + i + "</td><td>" + obj[i] + "</td></tr>";
             }
         }
+        return res;
     }
 
     (function animloop() {
