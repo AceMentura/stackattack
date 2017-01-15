@@ -20,11 +20,22 @@ function Player(x,y) {
 		y = _y;
 	}
 
-	this.draw = function(canvas) {
+	this.draw = function(canvas, scene) {
+		window.log["player"] = {x: x, y: y, canMoveLeft: self.canMoveLeft(scene), canPushLeft: self.canPushLeft(scene), canMoveRight: self.canMoveRight(scene)};
 		canvas.drawTexture(x, y, self.textures.getTexture());
 	}
 
 	this.isJumping = false;
+
+
+	// These methods are here only because the gravity is made in the Scene instead of in the items
+	this.fall = function() {
+		this.textures.setJump();
+	}
+	this.land = function() {
+		this.textures.setIdle();
+	}
+
 
 	this.jump = function() {
 		if(self.isJumping || Math.floor(y) != y) return;

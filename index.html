@@ -6,10 +6,21 @@
 		body {
 			margin:0;
 		}
+		#log {
+			position:fixed;
+			left:20px;
+			top:20px;
+			z-index: 10;
+			background-color:rgba(60,60,60,0.8);
+			font-size: 18px;
+			color:white;
+			padding: 10px;
+		}
 	</style>
 </head>
 <body>
-	<canvas id="stack-attack" width="1920" height="1080" />
+	<canvas id="stack-attack" width="1920" height="1080" ></canvas>
+	<table id="log"></table>
 	<script type="text/javascript" src="textures.js"></script>
 	<script type="text/javascript" src="player.js"></script>
 	<script type="text/javascript" src="scene.js"></script>

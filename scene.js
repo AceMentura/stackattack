@@ -21,19 +21,27 @@ function Scene() {
 		addStaticTextures(canvas);
 		applyGravity();
 		for(var item in items) {
-			items[item].draw(canvas);
+			items[item].draw(canvas, self);
 		}
 	}
 
 	function setAnimateDropDown(item) {
 		if(!(!(item.interval))) return;
 		
+
+		// This executes the animations of falling in all items IF it is implemented
+		if(typeof item.fall == "function") {
+			item.fall();
+		}
 		var speed = 1/8; // means a blok per 50 milliseconds
 		item.interval = setInterval(function(){
 			item.setY(item.getY() - speed);
 			if(Math.floor(item.getY()) == item.getY()) {
 				clearInterval(item.interval);
 				item.interval = null;
+				if(typeof item.land == "function") {
+					item.land();
+				}
 			}
 		},50);
 	}

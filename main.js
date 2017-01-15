@@ -14,7 +14,7 @@
 
     function keyDownTextField (e) {
         var keyCode = e.keyCode;
-        console.log(keyCode);
+        // console.log(keyCode);
 
         if(keyCode == UP_KEY) {
             p1.jump();
@@ -47,9 +47,27 @@
 
     scene.add(p1);
 
+    window.log = [];
+
+    var log = document.getElementById("log");
+    function printLog() {
+        log.innerHTML = "";
+        for(var i in window.log) {
+            if(typeof window.log[i] == "object") {
+                log.innerHTML += "<tr colspan=2>" + i + "</tr>";
+                for(var j in window.log[i]) {
+                    log.innerHTML += "<tr><td>" + j + "</td><td>" + window.log[i][j] + "</td></tr>";    
+                }
+            } else {
+                log.innerHTML += "<tr><td>" + i + "</td><td>" + window.log[i] + "</td></tr>";
+            }
+        }
+    }
+
     (function animloop() {
         requestAnimFrame(animloop);
         canvas.clear();
         canvas.render();
+        printLog();
     })();
 })();
