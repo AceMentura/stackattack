@@ -8,10 +8,20 @@ function Scene() {
 		items.push(item);
 	}
 
+	// TODO: put all items in a matrix 12 by 5 so searching for an item is faster
 	this.isItemAt = function(x,y) {
 		for(var item in items) {
 			if(items[item].getX() == x && items[item].getY() == y) {
 				return true;
+			}
+		}
+		return false;
+	}
+
+	this.getItemAt = function(x,y) {
+		for(var item in items) {
+			if(items[item].getX() == x && items[item].getY() == y) {
+				return items[item];
 			}
 		}
 		return false;

@@ -87,11 +87,79 @@ function Player(x,y) {
 	}
 
 	this.canMoveLeft = function(scene) {
-		return x > 0 && !scene.isItemAt(x-1,y);
+		var noWall = x > 0; // No wall on the left
+		var noBoxLeftDown = !scene.isItemAt(x-1,Math.round(y)); // No box on my left
+		var floor = (Math.ceil(y) == 0 || scene.isItemAt(x, Math.ceil(y)-1)); // There is either floor or a box beneath me
+		var boxToClimbOn = scene.isItemAt(x-1, Math.floor(y));
+		window.log["moveLeft"] = {noWall: noWall, noBoxLeftDown: noBoxLeftDown, floor: floor || boxToClimbOn}
+		return noWall && noBoxLeftDown && (floor || boxToClimbOn);
 	}
 
 	this.canMoveRight = function(scene) {
-		return x < 11 && !scene.isItemAt(x+1,y); // 11 is max X
+		var noWall = x < 11;
+		var noBoxRightDown = !scene.isItemAt(x+1,Math.round(y));
+		var floor = (Math.floor(y) == 0 || scene.isItemAt(x, Math.floor(y)-1));
+		var boxToClimbOn = scene.isItemAt(x+1, Math.floor(y));
+		return noWall && noBoxRightDown && (floor || boxToClimbOn);
+	}
+
+	// TODO: DRY after testing is completed
+	this.canPushLeft = function(scene) {
+		var hasBoxLeft = scene.isItemAt(x-1, Math.round(y));
+		var noBoxByTheBoxOnTheLeft = !scene.isItemAt(x-2, y) && x > 1;
+		var noBoxOnTop = !scene.isItemAt(x-1,y+1);
+		var floor = (Math.floor(y) == 0 || scene.isItemAt(x, Math.floor(y)-1));
+		window.log["pushLeft"] = {
+			hasBoxLeft: hasBoxLeft,
+			noBoxLeftLeft: noBoxByTheBoxOnTheLeft,
+			noBoxOnTop: noBoxOnTop,
+			floor: floor
+		};
+		return hasBoxLeft && noBoxByTheBoxOnTheLeft && noBoxOnTop && floor;
+	}
+
+	this.canPushRight = function(scene) {
+		var hasBoxRight = scene.isItemAt(x+1, Math.round(y));
+		var noBoxByTheBoxOnTheRight = !scene.isItemAt(x+2, y) && x < 10;
+		var noBoxOnTop = !scene.isItemAt(x+1,y+1);
+		var floor = (Math.floor(y) == 0 || scene.isItemAt(x, Math.floor(y)-1));
+		window.log["pushRight"] = {
+			hasBoxRight: hasBoxRight,
+			noBoxRightRight: noBoxByTheBoxOnTheRight,
+			noBoxOnTop: noBoxOnTop,
+			floor: floor
+		};
+		return hasBoxRight && noBoxByTheBoxOnTheRight && noBoxOnTop && floor;
+	}
+
+	this.pushLeft = function() {
+		if(!(!(self.interval))) return;
+		
+		var speed = 1/8;
+		this.textures.setPushLeft();
+		self.interval = setInterval(function() {
+			x -= speed;
+			if(Math.floor(x) == x) {
+				clearInterval(self.interval);
+				self.interval = null;
+				self.textures.setIdle();
+			}
+		}, 100);
+	}
+
+	this.pushRight = function() {
+		if(!(!(self.interval))) return;
+		
+		var speed = 1/8;
+		this.textures.setPushRight();
+		self.interval = setInterval(function() {
+			x += speed;
+			if(Math.floor(x) == x) {
+				clearInterval(self.interval);
+				self.interval = null;
+				self.textures.setIdle();
+			}
+		}, 100);
 	}
 
 	this.textures.setIdle();
@@ -137,6 +205,24 @@ function PlayerTextures() {
 	            // Shifts the first texture and puts it last
 	            self.texture = window.textures.playerTexturesAnimations.walkRight.shift();
 	            window.textures.playerTexturesAnimations.walkRight.push(self.texture);
+	        },200);
+		},
+		setPushLeft: function() {
+			clearInterval(self.textureInterval);
+			self.texture = window.textures.playerTexturesAnimations.pushLeft[0];
+			self.textureInterval = setInterval(function(){
+	            // Shifts the first texture and puts it last
+	            self.texture = window.textures.playerTexturesAnimations.pushLeft.shift();
+	            window.textures.playerTexturesAnimations.pushLeft.push(self.texture);
+	        },200);
+		},
+		setPushRight: function() {
+			clearInterval(self.textureInterval);
+			self.texture = window.textures.playerTexturesAnimations.pushRight[0];
+			self.textureInterval = setInterval(function(){
+	            // Shifts the first texture and puts it last
+	            self.texture = window.textures.playerTexturesAnimations.pushRight.shift();
+	            window.textures.playerTexturesAnimations.pushRight.push(self.texture);
 	        },200);
 		}
 	}
