@@ -24,7 +24,7 @@
                 p1.moveLeft();
             }
             if(p1.canPushLeft(scene)){
-                p1.pushLeft();
+                p1.pushLeft(scene);
             }
         }
         if(keyCode == RIGHT_KEY) {
@@ -32,7 +32,7 @@
                 p1.moveRight();
             }
             if(p1.canPushRight(scene)) {
-                p1.pushRight();
+                p1.pushRight(scene);
             }
         }
     }

@@ -132,13 +132,17 @@ function Player(x,y) {
 		return hasBoxRight && noBoxByTheBoxOnTheRight && noBoxOnTop && floor;
 	}
 
-	this.pushLeft = function() {
+	this.pushLeft = function(scene) {
 		if(!(!(self.interval))) return;
 		
 		var speed = 1/8;
+
+		var box = scene.getItemAt(x-1, Math.round(y));
+
 		this.textures.setPushLeft();
 		self.interval = setInterval(function() {
 			x -= speed;
+			box.setX(box.getX() - speed);
 			if(Math.floor(x) == x) {
 				clearInterval(self.interval);
 				self.interval = null;
@@ -147,13 +151,15 @@ function Player(x,y) {
 		}, 100);
 	}
 
-	this.pushRight = function() {
+	this.pushRight = function(scene) {
 		if(!(!(self.interval))) return;
 		
 		var speed = 1/8;
+		var box = scene.getItemAt(x+1, Math.round(y));
 		this.textures.setPushRight();
 		self.interval = setInterval(function() {
 			x += speed;
+			box.setX(box.getX() + speed);
 			if(Math.floor(x) == x) {
 				clearInterval(self.interval);
 				self.interval = null;
